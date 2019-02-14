@@ -7,8 +7,13 @@ type Person struct {
 	name string
 	age  int
 }
+type Addr struct {
+	country string
+	city    string
+}
 type Student struct {
 	*Person
+	Addr
 	name  string
 	class int
 	score int
@@ -16,7 +21,7 @@ type Student struct {
 
 func main() {
 
-	stu := Student{&Person{1, "wangkaixuan", 24}, "wkx", 1, 100}
+	stu := Student{&Person{1, "wangkaixuan", 24}, Addr{"中国", "遵义"}, "wkx", 1, 100}
 	fmt.Println(stu)
 	stu.name = "chengangrong"
 	fmt.Println(stu)
@@ -27,4 +32,6 @@ func main() {
 	fmt.Printf("%d\n", stu.age)
 	fmt.Printf("%d\n", stu.class)
 	fmt.Printf("%d\n", stu.score)
+	fmt.Printf("%s\n", stu.country)
+	fmt.Printf("%s\n", stu.city)
 }
