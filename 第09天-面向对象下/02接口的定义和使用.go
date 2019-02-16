@@ -17,7 +17,7 @@ type Teacher struct {
 	sub  string
 }
 
-func (h *Teacheru) SayHello() {
+func (h *Teacher) SayHello() {
 	fmt.Println(*h)
 }
 func (h *Student) SayHello() {
