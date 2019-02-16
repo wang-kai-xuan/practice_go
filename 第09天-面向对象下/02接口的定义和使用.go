@@ -24,12 +24,12 @@ func (h *Student) SayHello() {
 	fmt.Println(*h)
 }
 
+func SayHello(h Humaner) {
+	h.SayHello()
+}
 func main() {
 	s := Student{"王凯旋", 24, "男"}
 	t := Teacher{"王凯旋", 24, "男", "计算机"}
-	var h Humaner
-	h = &s
-	h.SayHello()
-	h = &t
-	h.SayHello()
+	SayHello(&s)
+	SayHello(&t)
 }
