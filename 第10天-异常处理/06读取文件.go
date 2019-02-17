@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -12,8 +14,12 @@ func main() {
 		return
 	}
 	defer fp.Close()
-	buf := make([]byte, 20)
-	fp.Read(buf)
-	fmt.Println(string(buf))
-
+	r := bufio.NewReader(fp)
+	for {
+		str, err := r.ReadString('\n')
+		fmt.Println(str)
+		if err == io.EOF {
+			break
+		}
+	}
 }
