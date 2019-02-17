@@ -11,5 +11,6 @@ func main() {
 		fmt.Println("创建文件失败")
 		return
 	}
-	fp.Close()
+	defer fp.Close()
+	fp.WriteString("我叫王凯旋")
 }
