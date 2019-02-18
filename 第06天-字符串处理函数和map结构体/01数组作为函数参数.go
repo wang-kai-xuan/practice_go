@@ -16,7 +16,12 @@ func swap(arr [10]int) [10]int {
 }
 func main() {
 	arr := [10]int{10, 3, 2, 1, 4, 5, 6, 7, 8, 9}
+	arr1 := [10]int{10, 3, 2, 1, 4, 5, 6, 7, 8, 9}
+	fmt.Println(arr == arr1)
 	fmt.Println(arr)
 	fmt.Println(swap(arr))
 	fmt.Println(arr)
+	//var i int
+	i := 1
+	fmt.Println(i)
 }

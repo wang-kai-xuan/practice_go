@@ -7,4 +7,6 @@ func main() {
 	fmt.Println(m)
 	m["name"] = "陈刚容"
 	fmt.Println(m)
+	delete(m, "name")
+	fmt.Println(m)
 }

@@ -10,4 +10,6 @@ func main() {
 	fmt.Println(arr_slice)
 	arr_slice = append(arr_slice, 6)
 	fmt.Println(arr_slice)
+	delete(arr_slice, 123)
+
 }
