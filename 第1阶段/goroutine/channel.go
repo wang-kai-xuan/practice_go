@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 	"time"
 )
 
@@ -23,9 +22,15 @@ func user1() {
 }
 func main() {
 
-	// channel可以用来操作的同步
-	go user2()
-	<-channel // 等待数据，无数据时会阻塞
-	go user1()
-	runtime.Goexit()
+	go func() {
+		for i := 0; i < 5; i++ {
+			fmt.Println("-- in child---: i=", i)
+			channel <- i
+		}
+	}()
+	for i := 0; i < 5; i++ {
+		num := <-channel
+		fmt.Println("-- in main---: num=", num)
+	}
+
 }
