@@ -1,4 +1,4 @@
-package main
+package 第0阶段
 
 import "fmt"
 
