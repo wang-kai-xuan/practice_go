@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var channel = make(chan int)
+var channel = make(chan int, 5)
 
 func printer(s string) {
 	for _, ch := range s {
@@ -21,14 +21,13 @@ func user1() {
 	printer("--user1 use--")
 }
 func main() {
-
 	go func() {
-		for i := 0; i < 5; i++ {
-			fmt.Println("-- in child---: i=", i)
+		for i := 0; i < 15; i++ {
 			channel <- i
+			fmt.Println("-- in child---: i=", i, " len=", len(channel), " cap=", cap(channel))
 		}
 	}()
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 15; i++ {
 		num := <-channel
 		fmt.Println("-- in main---: num=", num)
 	}
