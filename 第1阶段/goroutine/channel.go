@@ -24,11 +24,14 @@ func main() {
 	go func() {
 		for i := 0; i < 15; i++ {
 			channel <- i
+			if i == 10 {
+				close(channel)
+				return
+			}
 			fmt.Println("-- in child---: i=", i, " len=", len(channel), " cap=", cap(channel))
 		}
 	}()
-	for i := 0; i < 15; i++ {
-		num := <-channel
+	for num := range channel {
 		fmt.Println("-- in main---: num=", num)
 	}
 
