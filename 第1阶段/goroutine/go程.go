@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+)
 
 func song() {
 	for i := 0; i < 100; i++ {
@@ -13,9 +16,13 @@ func dance() {
 	}
 }
 func main() {
-	go dance()
-	go song()
-	for {
-
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println("---goroutine---")
+		}
+	}()
+	runtime.Gosched()
+	for i := 0; i < 10; i++ {
+		fmt.Println("---main goroutine---")
 	}
 }
