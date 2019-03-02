@@ -16,15 +16,13 @@ func dance() {
 	}
 }
 func main() {
-	go func() {
-		defer fmt.Println("---in defer---")
-		fmt.Println("---goroutine 0---")
-		fmt.Println("---goroutine 1---")
-		runtime.Goexit()
-		fmt.Println("---goroutine 2---")
-		fmt.Println("---goroutine 3---")
-	}()
-	for {
+	fmt.Println(runtime.GOROOT())
+	fmt.Println(runtime.NumCPU())
+	n := runtime.GOMAXPROCS(2)
+	fmt.Println(n)
 
+	for i := 0; i < 10; i++ {
+		go fmt.Println(0)
+		fmt.Println(1)
 	}
 }
