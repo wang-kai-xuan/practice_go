@@ -17,12 +17,14 @@ func dance() {
 }
 func main() {
 	go func() {
-		for i := 0; i < 10; i++ {
-			fmt.Println("---goroutine---")
-		}
+		defer fmt.Println("---in defer---")
+		fmt.Println("---goroutine 0---")
+		fmt.Println("---goroutine 1---")
+		runtime.Goexit()
+		fmt.Println("---goroutine 2---")
+		fmt.Println("---goroutine 3---")
 	}()
-	runtime.Gosched()
-	for i := 0; i < 10; i++ {
-		fmt.Println("---main goroutine---")
+	for {
+
 	}
 }
