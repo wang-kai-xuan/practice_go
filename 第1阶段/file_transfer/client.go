@@ -20,6 +20,7 @@ func sendFile(conn net.Conn, filePath string) {
 	buf := make([]byte, 4096)
 	for {
 		n, err := f.Read(buf)
+		fmt.Println(buf)
 		if err != nil {
 			if err == io.EOF {
 				fmt.Println("文件发送完成")
@@ -27,6 +28,7 @@ func sendFile(conn net.Conn, filePath string) {
 				fmt.Println("os.Read err", err)
 				return
 			}
+			return
 		}
 		conn.Write(buf[:n])
 	}
@@ -71,6 +73,6 @@ func main() {
 		return
 	}
 	if "ok" == string(buf[:n]) {
-
+		sendFile(conn, fileName)
 	}
 }
