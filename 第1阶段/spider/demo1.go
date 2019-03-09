@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+var readNum = make(chan int)
+
 func HttpGet(url string) (res string, err error) {
 	resp, err1 := http.Get(url)
 	if err1 != nil {
@@ -18,7 +20,6 @@ func HttpGet(url string) (res string, err error) {
 	for {
 		n, _ := resp.Body.Read(buf)
 		if n == 0 {
-			fmt.Println("读取完成")
 			break
 		}
 		res += string(buf[:n])
@@ -39,18 +40,24 @@ func getAndSave(url string, i int) {
 	}
 	f.WriteString(res)
 	f.Close()
+	readNum <- i
 }
 func working(start, end int) {
+
 	for i := start; i < end; i++ {
 		url := "https://tieba.baidu.com/f?kw=%E7%BB%9D%E5%9C%B0%E6%B1%82%E7%94%9F&ie=utf-8&pn=1" + strconv.Itoa((i-1)*50)
 		go getAndSave(url, i)
 	}
+	for i := start; i < end; i++ {
+		fmt.Println("第", <-readNum, "页读取完成")
+	}
 }
 func main() {
-	//var start, end int
+	//var start, end int = 1, 3
 	//fmt.Println("输入开始抓取的起始页：")
 	//fmt.Scan(&start)
 	//fmt.Println("输入结束抓取的终止页：")
 	//fmt.Scan(&end)
-	working(1, 3)
+	working(1, 4)
+
 }
