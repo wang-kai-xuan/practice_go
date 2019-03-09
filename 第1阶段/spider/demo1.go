@@ -25,21 +25,25 @@ func HttpGet(url string) (res string, err error) {
 	}
 	return
 }
+
+func getAndSave(url string, i int) {
+	// 爬取数据
+	fmt.Println("正在爬取第", i, "页,url:", url)
+	res, err := HttpGet(url)
+
+	fileName := strconv.Itoa(i) + ".html"
+	f, err := os.Create(fileName)
+	if err != nil {
+		fmt.Println("Create err:", err)
+		return
+	}
+	f.WriteString(res)
+	f.Close()
+}
 func working(start, end int) {
 	for i := start; i < end; i++ {
-		// 爬取数据
 		url := "https://tieba.baidu.com/f?kw=%E7%BB%9D%E5%9C%B0%E6%B1%82%E7%94%9F&ie=utf-8&pn=1" + strconv.Itoa((i-1)*50)
-		fmt.Println("正在爬取第", i, "页,url:", url)
-		res, err := HttpGet(url)
-
-		fileName := strconv.Itoa(i) + ".html"
-		f, err := os.Create(fileName)
-		if err != nil {
-			fmt.Println("Create err:", err)
-			continue
-		}
-		f.WriteString(res)
-		f.Close()
+		go getAndSave(url, i)
 	}
 }
 func main() {
