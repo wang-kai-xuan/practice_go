@@ -3,3 +3,4 @@
 *.txt
 newDir
 *.db
+*.pb.go
