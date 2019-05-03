@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"practice_go/microServices/proto"
+	"github.com/golang/protobuf/proto"
+	"practice_go/microServices/prototext"
 )
 
 func main() {
-	text := &proto.Demo1{
+	text := &prototext.Demo1{
 		Name:   "wangkaixuan",
 		Weight: []int32{150, 140},
 		Height: 175,
@@ -14,4 +15,19 @@ func main() {
 	}
 
 	fmt.Println(text)
+
+	data, err := proto.Marshal(text)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(data)
+
+	newText := &prototext.Demo1{}
+
+	err = proto.Unmarshal(data, newText)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(newText)
+
 }
