@@ -26,3 +26,16 @@ func TestJson(t *testing.T) {
 	r1 := fmt.Sprintf("%s\n", r)
 	fmt.Printf("%s\n", r1)
 }
+
+// 问题：如何获取interface类型变量的成员
+// 回答：fmt.Sprintf
+func TestInterfaceMember(t *testing.T) {
+	var i interface{}
+	i = 1
+	i = "nihao"
+
+	i1 := fmt.Sprintf("%s", i)
+	i = true
+	fmt.Println(i)
+	fmt.Println(i1)
+}
