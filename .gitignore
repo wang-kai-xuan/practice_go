@@ -4,3 +4,4 @@
 newDir
 *.db
 *.pb.go
+*.log
