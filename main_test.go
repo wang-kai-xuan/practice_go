@@ -11,6 +11,28 @@ type person struct {
 	Age  int
 }
 
+func TestMap(t *testing.T) {
+	// test content:
+	// init,write, read
+	m := map[string]string{"name": "王凯旋", "age": "24", "gender": "男"}
+	fmt.Println(m)
+	m["name"] = "陈刚容"
+	fmt.Println(m)
+	delete(m, "name")
+	fmt.Println(m)
+}
+func TestMap1(t *testing.T) {
+	// test content:
+	// init,write, read
+	m := make(map[string]string)
+	m["cgr"] = "陈刚容"
+	fmt.Println(m)
+	m["wkx"] = "王凯旋"
+	fmt.Println(m)
+	delete(m, "wkx")
+	fmt.Println(m)
+}
+
 // byte转字符串
 func TestJson(t *testing.T) {
 	p := person{Name: "wangkaixuan", Age: 25}
