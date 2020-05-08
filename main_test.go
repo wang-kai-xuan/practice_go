@@ -33,6 +33,22 @@ func TestMap1(t *testing.T) {
 	fmt.Println(m)
 }
 
+func TestMap2(t *testing.T) {
+	// test content:
+	// read not exist val
+	m := make(map[string]string)
+	m["wkx"] = "王凯旋"
+	name := m["wkx"]
+	fmt.Println(name)
+	name1 := m["wkx1"]
+	if name1 == "" {
+		fmt.Println("name not exist")
+	} else {
+		fmt.Println("name exist")
+	}
+	fmt.Println("end")
+}
+
 // byte转字符串
 func TestJson(t *testing.T) {
 	p := person{Name: "wangkaixuan", Age: 25}
