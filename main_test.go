@@ -49,6 +49,16 @@ func TestMap2(t *testing.T) {
 	fmt.Println("end")
 }
 
+func TestMap3(t *testing.T) {
+	m := make(map[string]string)
+	m["wkx"] = "nihao"
+	m["wkx1"] = "nihao1"
+	m["wkx2"] = "nihao2"
+	if m["wk"] == "" {
+		fmt.Println("str")
+	}
+}
+
 // byte转字符串
 func TestJson(t *testing.T) {
 	p := person{Name: "wangkaixuan", Age: 25}
