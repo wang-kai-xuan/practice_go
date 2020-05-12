@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -50,13 +52,21 @@ func TestMap2(t *testing.T) {
 }
 
 func TestMap3(t *testing.T) {
-	m := make(map[string]string)
-	m["wkx"] = "nihao"
-	m["wkx1"] = "nihao1"
-	m["wkx2"] = "nihao2"
-	if m["wk"] == "" {
-		fmt.Println("str")
+	type person struct {
+		name   string
+		height int
 	}
+
+	m := make(map[string]*person)
+	m["wkx"] = &person{"wkx", 170}
+	delete(m, "wkx")
+	delete(m, "wkx")
+	delete(m, "")
+}
+func TestMap4(t *testing.T) {
+	m := make([]string, 0, 10)
+	fmt.Println(len(m))
+	fmt.Println(m)
 }
 
 func getMap() map[string]string {
@@ -130,4 +140,9 @@ func TestSet(t *testing.T) {
 	s.Remove(2)
 	s.Remove(3)
 	fmt.Println("list of all items", s.List())
+}
+func TestNumConvertToString(t *testing.T) {
+	age := 25
+	stat := "you are #param"
+	fmt.Println(strings.Replace(stat, "#param", strconv.Itoa(age), 1))
 }
