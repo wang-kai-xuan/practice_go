@@ -146,3 +146,16 @@ func TestNumConvertToString(t *testing.T) {
 	stat := "you are #param"
 	fmt.Println(strings.Replace(stat, "#param", strconv.Itoa(age), 1))
 }
+
+func TestDeleteArray(t *testing.T) {
+	// delete the elem when range a variable
+	// Will it cause panic?
+	//NOTE delete an array when traverse itself, will miss an item
+	name := []string{"wkx", "cgr", "wkx0", "wkx1", "wkx2", "wkx3"}
+	for index, val := range name {
+		if index == 1 {
+			copy(name[1:], name[2:])
+		}
+		fmt.Println(index, val)
+	}
+}
