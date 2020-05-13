@@ -28,14 +28,16 @@ func NewLogger() *logrus.Logger {
 		return Log
 	}
 
+	date := "./" + time.Now().Format(time.RFC3339)[:10]
+
 	pathMap := lfshook.PathMap{
-		logrus.InfoLevel:  "./info.log",
-		logrus.ErrorLevel: "./error.log",
+		logrus.InfoLevel:  date + "-info.log",
+		logrus.ErrorLevel: date + "-error.log",
 	}
 
 	Log = logrus.New()
 
-	name := "./" + time.Now().Format(time.RFC3339)[:10] + ".log"
+	name := date + ".log"
 	logFile, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
 	if nil != err {
 		panic(err)
