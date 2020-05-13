@@ -6,8 +6,38 @@ import (
 	"testing"
 	"time"
 
+	"github.com/rifflock/lfshook"
 	logrus "github.com/sirupsen/logrus"
 )
+
+var Log *logrus.Logger
+
+func NewLogger() *logrus.Logger {
+	if Log != nil {
+		return Log
+	}
+
+	pathMap := lfshook.PathMap{
+		logrus.InfoLevel:  "./info.log",
+		logrus.ErrorLevel: "./error.log",
+	}
+
+	Log = logrus.New()
+
+	name := "./" + time.Now().Format(time.RFC3339)[:10] + ".log"
+	logFile, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+	if nil != err {
+		panic(err)
+	}
+
+	Log.SetLevel(logrus.TraceLevel)
+	Log.SetOutput(logFile)
+	Log.Hooks.Add(lfshook.NewHook(
+		pathMap,
+		&logrus.TextFormatter{},
+	))
+	return Log
+}
 
 // TestLogExample TestLogExample
 func TestLogExample(t *testing.T) {
@@ -35,7 +65,6 @@ func init() {
 	// Only log the warning severity or above.
 	logrus.SetLevel(logrus.TraceLevel)
 	logrus.SetOutput(logFile)
-
 }
 
 func TestLogrus(t *testing.T) {
@@ -62,4 +91,28 @@ func TestLogrus(t *testing.T) {
 		"omg":    true,
 		"number": 100,
 	}).Fatal("The ice breaks!")
+}
+
+func TestLogrus1(t *testing.T) {
+	Log = NewLogger()
+
+	Log.WithFields(logrus.Fields{
+		"omg": true,
+	}).Info("nihao test")
+
+	Log.WithFields(logrus.Fields{
+		"omg": true,
+	}).Debug("nihao test")
+
+	Log.WithFields(logrus.Fields{
+		"omg": true,
+	}).Warn("nihao test")
+
+	Log.WithFields(logrus.Fields{
+		"omg": true,
+	}).Error("nihao test")
+
+	Log.WithFields(logrus.Fields{
+		"omg": true,
+	}).Fatal("nihao test")
 }
