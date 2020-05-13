@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"testing"
@@ -11,6 +12,16 @@ import (
 )
 
 var Log *logrus.Logger
+
+type PlainFormatter struct {
+	TimestampFormat string
+	LevelDesc       []string
+}
+
+func (f *PlainFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+	timestamp := fmt.Sprintf(entry.Time.Format(f.TimestampFormat))
+	return []byte(fmt.Sprintf("%s %s \"%s\"\n", timestamp, f.LevelDesc[entry.Level], entry.Message)), nil
+}
 
 func NewLogger() *logrus.Logger {
 	if Log != nil {
@@ -29,12 +40,16 @@ func NewLogger() *logrus.Logger {
 	if nil != err {
 		panic(err)
 	}
+	plainFormatter := new(PlainFormatter)
+	plainFormatter.TimestampFormat = "2006-01-02 15:04:05"
+	plainFormatter.LevelDesc = []string{"PANC", "FATL", "ERRO", "WARN", "INFO", "DEBG"}
+	Log.SetFormatter(plainFormatter)
 
 	Log.SetLevel(logrus.TraceLevel)
 	Log.SetOutput(logFile)
 	Log.Hooks.Add(lfshook.NewHook(
 		pathMap,
-		&logrus.TextFormatter{},
+		plainFormatter,
 	))
 	return Log
 }
