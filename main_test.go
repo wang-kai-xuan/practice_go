@@ -59,6 +59,22 @@ func TestMap3(t *testing.T) {
 	}
 }
 
+func getMap() map[string]string {
+	m := make(map[string]string)
+	m["wkx"] = "nihao"
+	m["wkx1"] = "nihao1"
+	m["wkx2"] = "nihao2"
+	return m
+}
+
+// 测试两个map对象赋值是深拷贝还是浅拷贝
+func TestMap4(t *testing.T) {
+	m1 := make(map[string]string)
+	m1 = getMap()
+	delete(m1, "wkx")
+	fmt.Println(m1)
+}
+
 // byte转字符串
 func TestJson(t *testing.T) {
 	p := person{Name: "wangkaixuan", Age: 25}
