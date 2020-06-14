@@ -96,6 +96,16 @@ func TestMap5(t *testing.T) {
 	// fmt.Println(b2)
 }
 
+// 比较字符串的前缀
+func TestStringPrefix(t *testing.T) {
+	name1 := "wangkaixuan"
+	name2 := "wangkx"
+
+	fmt.Println(strings.HasPrefix(name1, "wang"))
+	fmt.Println(strings.HasPrefix(name1, "wangkx"))
+	fmt.Println(strings.HasPrefix(name2, "wang"))
+}
+
 // byte转字符串
 func TestJson(t *testing.T) {
 	p := person{Name: "wangkaixuan", Age: 25}
