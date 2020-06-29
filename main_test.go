@@ -1,11 +1,21 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
+	"math/big"
+	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"testing"
+	"time"
+
+	"github.com/tidwall/gjson"
 )
 
 type person struct {
@@ -33,6 +43,8 @@ func TestMap1(t *testing.T) {
 	fmt.Println(m)
 	delete(m, "wkx")
 	fmt.Println(m)
+	name := m["nihao"]
+	fmt.Println(name)
 }
 
 func TestMap2(t *testing.T) {
@@ -69,20 +81,18 @@ func TestMap4(t *testing.T) {
 	fmt.Println(m)
 }
 
-func getMap() map[string]string {
-	m := make(map[string]string)
-	m["wkx"] = "nihao"
-	m["wkx1"] = "nihao1"
-	m["wkx2"] = "nihao2"
-	return m
-}
-
-// 测试两个map对象赋值是深拷贝还是浅拷贝
-func TestMap4(t *testing.T) {
-	m1 := make(map[string]string)
-	m1 = getMap()
-	delete(m1, "wkx")
-	fmt.Println(m1)
+func TestMap5(t *testing.T) {
+	walletCodeBalanceMap := make(map[string]int64)
+	walletCodeBalanceMap["hello"] = 7
+	b1 := walletCodeBalanceMap["hello"]
+	if _, ok := walletCodeBalanceMap["hello"]; ok {
+		fmt.Println("exist hello")
+	}
+	if _, ok := walletCodeBalanceMap["hello1"]; ok {
+		fmt.Println("exist hello1")
+	}
+	fmt.Println(b1)
+	// fmt.Println(b2)
 }
 
 // byte转字符串
@@ -99,6 +109,16 @@ func TestJson(t *testing.T) {
 	fmt.Printf("%v\n", r)
 	r1 := fmt.Sprintf("%s\n", r)
 	fmt.Printf("%s\n", r1)
+}
+
+func TestJson1(t *testing.T) {
+	str := `["wkx","cgr"]`
+	res := gjson.Parse(str)
+
+	for item, key := range res.Array() {
+		fmt.Println(item, key)
+	}
+	fmt.Println(str)
 }
 
 // 问题：如何获取interface类型变量的成员
@@ -157,5 +177,149 @@ func TestDeleteArray(t *testing.T) {
 			copy(name[1:], name[2:])
 		}
 		fmt.Println(index, val)
+	}
+}
+
+func Prinf1() {
+	for i := 0; i < 10; i++ {
+		fmt.Printf("Prinf1:%d\n", i)
+	}
+}
+
+func Prinf2(cnt int) {
+	fmt.Printf("Prinf2:%d\n", cnt)
+}
+
+func own_print(flag string, quit chan string) {
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%s:%d\n", flag, i)
+		time.Sleep(time.Second * 1)
+	}
+	quit <- flag
+}
+
+func TestGo(t *testing.T) {
+	go1 := make(chan string)
+	go2 := make(chan string)
+
+	go own_print("go1", go1)
+	go own_print("go2", go2)
+
+	quitCnt := 0
+
+	for {
+		select {
+		case str1 := <-go1:
+			fmt.Printf("Process %s\n", str1)
+			quitCnt++
+
+		case str2 := <-go2:
+			fmt.Printf("Process %s\n", str2)
+			quitCnt++
+
+		default:
+			if quitCnt >= 2 {
+				close(go1)
+				close(go2)
+				fmt.Printf("exit\n")
+				return
+			}
+		}
+	}
+}
+
+func TestBigInt(t *testing.T) {
+	i1 := new(big.Int)
+	i1.SetString("10000000000000000000", 10)
+
+	i2 := new(big.Int)
+	i2.SetString("10000000000000100000", 10)
+
+	i3 := new(big.Int)
+	i3.SetString("10000000000000100000", 10)
+
+	fmt.Println(i1.Cmp(i2))
+	fmt.Println(i2.Cmp(i1))
+	fmt.Println(i2.Cmp(i3))
+
+	fmt.Println(i3.String())
+}
+func TestBigFloat(t *testing.T) {
+	i1 := new(big.Float)
+	i1.SetString("10000000000000000000")
+
+	i2 := new(big.Float)
+	i2.SetString("10000000000000100000")
+
+	i3 := new(big.Float)
+	i3.SetString("10000000000000100000")
+
+	fmt.Println(i1.Cmp(i2))
+	fmt.Println(i2.Cmp(i1))
+	fmt.Println(i2.Cmp(i3))
+
+	fmt.Println(i3.String())
+	fmt.Println(i3.Float64())
+}
+
+func TestIntConvertFloat(t *testing.T) {
+	s1 := "10000"
+	f1, _ := strconv.ParseFloat(s1, 64)
+	fmt.Println(f1)
+}
+
+func TestIoutils(t *testing.T) {
+	url := "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Details_of_the_Object_Model"
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+		os.Exit(1)
+	}
+	var buf bytes.Buffer
+	// b, err := ioutil.ReadAll(resp.Body)
+	io.Copy(&buf, resp.Body)
+	resp.Body.Close()
+	str := buf.String()
+	fmt.Printf("%s", str)
+}
+
+func TestFile(t *testing.T) {
+	err := ioutil.WriteFile("testwrite.txt", []byte("Dumping bytes to a file\n"), 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	buf, err := ioutil.ReadFile("./testwrite.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	content := string(buf)
+	fmt.Println(content)
+}
+
+func TestStr(t *testing.T) {
+	words := "nnihao"
+	fmt.Println(words)
+}
+
+type Person struct {
+	alias string
+	age   int
+}
+
+func TestMapPassParams(t *testing.T) {
+	names := make(map[string]Person)
+	names["wkx0"] = Person{"wkx", 26}
+	names["wkx1"] = Person{"wkx", 26}
+	names["wkx2"] = Person{"wkx", 26}
+	names["wkx3"] = Person{"wkx", 26}
+	modifyName(names)
+	fmt.Println(names)
+}
+func modifyName(names map[string]Person) {
+	for key := range names {
+		item := names[key]
+		item.alias = "====="
+		names[key] = item
 	}
 }
