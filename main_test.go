@@ -4,16 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-<<<<<<< HEAD
 	"io"
 	"io/ioutil"
 	"log"
 	"math/big"
 	"net/http"
 	"os"
-=======
-	"math/big"
->>>>>>> En: add TestBigInt
 	"strconv"
 	"strings"
 	"testing"
