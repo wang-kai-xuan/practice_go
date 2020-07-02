@@ -3,6 +3,7 @@ module github.com/iroan/practice_go
 go 1.13
 
 require (
+	github.com/keepeye/logrus-filename v0.0.0-20190711075016-ce01a4391dd1
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/sirupsen/logrus v1.6.0
 	github.com/tidwall/gjson v1.6.0
