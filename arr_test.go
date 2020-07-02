@@ -19,3 +19,13 @@ func TestArrType(t *testing.T) {
 		fmt.Println(item)
 	}
 }
+
+func TestArr(t *testing.T) {
+	var name []string
+	name = append(name, "wkx")
+	name = append(name, "wkx")
+	name = append(name, "wkx")
+	name = []string{}
+	fmt.Println(name)
+	name = append(name, "wkx")
+}
