@@ -15,6 +15,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tidwall/gjson"
 )
 
@@ -322,4 +323,14 @@ func modifyName(names map[string]Person) {
 		item.alias = "====="
 		names[key] = item
 	}
+}
+
+func changeName(names []string) {
+	names[0] = "wkx1"
+}
+
+func TestSliceParams(t *testing.T) {
+	names := []string{"wangkaixuan", "cgr", "wkx"}
+	changeName(names)
+	assert.True(t, names[0] == "wkx1")
 }
