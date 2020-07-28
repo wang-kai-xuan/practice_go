@@ -10,7 +10,9 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
+	"sync"
 	"syscall"
+	"time"
 
 	logrus "github.com/sirupsen/logrus"
 	"golang.org/x/net/html"
@@ -104,8 +106,31 @@ func testSignal() {
 		fmt.Println(sig)
 		done <- true
 	}()
-
 	fmt.Println("awaiting signal")
 	<-done
 	fmt.Println("exiting")
+}
+
+func fCh1(wg *sync.WaitGroup, num int) {
+	defer wg.Done()
+	fmt.Println("will sleep:", num, " second(s).")
+	time.Sleep(time.Duration(num) * time.Second)
+}
+
+func testGoroutineExit() {
+	var wg sync.WaitGroup
+	ch := make(chan int)
+
+	wg.Add(1)
+	go fCh1(&wg, 1)
+
+	wg.Add(1)
+	go fCh1(&wg, 2)
+
+	wg.Add(1)
+	go fCh1(&wg, 3)
+
+	wg.Wait()
+	fmt.Println("normail exit")
+	close(ch)
 }
