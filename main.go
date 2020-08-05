@@ -1,36 +1,83 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 
+	logrus "github.com/sirupsen/logrus"
 	"golang.org/x/net/html"
 )
 
-func main() {
-	parseAddr()
+type Config struct {
+	StartPage  int
+	EndPage    int
+	WalletName string
 }
 
-func parseAddr() {
-	buf, err := ioutil.ReadFile("./BitcoinFogAddresses.html")
+var logger *logrus.Logger
+
+func main() {
+	var env string
+	flag.StringVar(&env, "conf", "walletexplorer", "-conf filename")
+	flag.Parse()
+
+	logger = NewLogger(env)
+	configFilePath := "./" + env + ".json"
+
+	configBuf, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		log.Fatal(err)
+		panic("config file error, now process exit")
 	}
 
+	// buf, err := ioutil.WriteFile("./BitcoinFogAddresses.html")
+
+	var config Config
+	err = json.Unmarshal(configBuf, &config)
+	if err != nil {
+		panic("parse config file error, now process exit")
+	}
+
+	resultFileName := "./" + env + "_result.txt"
+	f, err := os.OpenFile(resultFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logger.Error(err)
+	}
+	defer f.Close()
+	for i := config.StartPage; i < config.EndPage; i++ {
+		logger.Info("query page num:", strconv.Itoa(i))
+		url := "https://www.walletexplorer.com/wallet/" + config.WalletName + "/addresses?page=" + strconv.Itoa(i)
+		parseAddr(url, f)
+	}
+}
+
+func parseAddr(url string, f *os.File) {
+	// buf, err := ioutil.ReadFile("./BitcoinFogAddresses.html")
+	resp, err := http.Get(url)
+	if err != nil {
+		logger.Errorln(err)
+	}
+	defer resp.Body.Close()
+	buf, err := ioutil.ReadAll(resp.Body)
 	s := string(buf)
 	doc, err := html.Parse(strings.NewReader(s))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
 		os.Exit(1)
 	}
-	for _, link := range visit(nil, doc) {
-		fmt.Println(link)
+	for _, addr := range visit(nil, doc) {
+		if _, err := f.WriteString(addr); err != nil {
+			logger.Error(err)
+		}
 	}
+
 }
 
 func visit(links []string, n *html.Node) []string {

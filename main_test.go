@@ -294,6 +294,18 @@ func TestIoutils(t *testing.T) {
 	fmt.Printf("%s", str)
 }
 
+func TestAppendFile(t *testing.T) {
+	f, err := os.OpenFile("text.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+	if _, err := f.WriteString("text to append\n"); err != nil {
+		log.Println(err)
+	}
+}
+
 func TestFile(t *testing.T) {
 	err := ioutil.WriteFile("testwrite.txt", []byte("Dumping bytes to a file\n"), 0666)
 	if err != nil {
