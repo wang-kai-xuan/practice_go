@@ -4,12 +4,16 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+<<<<<<< HEAD
 	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
 	"strings"
+=======
+	"os"
+>>>>>>> En: add getSelfRealPath
 	"sync"
 	"syscall"
 	"time"
@@ -134,3 +138,28 @@ func testGoroutineExit() {
 	fmt.Println("normail exit")
 	close(ch)
 }
+<<<<<<< HEAD
+=======
+
+func getSelfRealPath() {
+	configFilePath := func() string {
+		optional := []string{"./go.mod", "./practice_go/go.mod"}
+		for _, tmp := range optional {
+			_, err := os.Stat(tmp)
+			if err == nil {
+				return tmp
+			} else if os.IsNotExist(err) {
+				return tmp
+			}
+		}
+		panic("not found avaiable config file")
+	}()
+
+	fmt.Println(configFilePath)
+}
+
+func main() {
+	// testGoroutineExit()
+	getSelfRealPath()
+}
+>>>>>>> En: add getSelfRealPath
