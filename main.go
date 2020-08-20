@@ -4,16 +4,12 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-<<<<<<< HEAD
 	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
 	"strings"
-=======
-	"os"
->>>>>>> En: add getSelfRealPath
 	"sync"
 	"syscall"
 	"time"
@@ -138,8 +134,6 @@ func testGoroutineExit() {
 	fmt.Println("normail exit")
 	close(ch)
 }
-<<<<<<< HEAD
-=======
 
 func getSelfRealPath() {
 	configFilePath := func() string {
@@ -157,9 +151,3 @@ func getSelfRealPath() {
 
 	fmt.Println(configFilePath)
 }
-
-func main() {
-	// testGoroutineExit()
-	getSelfRealPath()
-}
->>>>>>> En: add getSelfRealPath

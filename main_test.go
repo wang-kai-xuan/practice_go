@@ -356,3 +356,17 @@ func TestSliceParams(t *testing.T) {
 	changeName(names)
 	assert.True(t, names[0] == "wkx1")
 }
+
+func Test_bigNum(t *testing.T) {
+	num1 := big.NewInt(0)
+	num1.SetString("184467440737095520009", 10)
+	fmt.Println(num1.String())
+	fmt.Println(num1.Int64())
+
+	num2 := big.NewInt(0)
+	num2.SetString("10000000000", 10)
+	num1.Div(num1, num2)
+
+	fmt.Println(num1.String())
+	fmt.Println(num1.Int64())
+}
