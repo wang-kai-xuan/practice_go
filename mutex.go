@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-	"testing"
 	"time"
 )
 
@@ -11,6 +10,10 @@ import (
 type SafeCounter struct {
 	v   map[string]int
 	mux sync.Mutex
+}
+
+func NewSafeCounter() SafeCounter {
+	return SafeCounter{v: make(map[string]int)}
 }
 
 // Inc 增加给定 key 的计数器的值。
@@ -29,9 +32,9 @@ func (c *SafeCounter) Value(key string) int {
 	return c.v[key]
 }
 
-func TestMutex(t *testing.T) {
-	c := SafeCounter{v: make(map[string]int)}
-	for i := 0; i < 1000000; i++ {
+func main() {
+	c := NewSafeCounter()
+	for i := 0; i < 100; i++ {
 		go c.Inc("somekey")
 	}
 
