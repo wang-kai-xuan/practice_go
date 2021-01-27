@@ -5,5 +5,4 @@ newDir
 *.db
 *.pb.go
 *.log
-tmp
-tmp.*
+tmp*
