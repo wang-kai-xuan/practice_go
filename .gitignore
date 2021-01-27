@@ -6,3 +6,4 @@ newDir
 *.pb.go
 *.log
 tmp*
+/vendor
